@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    >
+    
+   
+    <!--全局字体-->
+    
+    
+    <!--微软雅黑-->
+    <FontFamily x:Key="微软雅黑">pack://application:,,,/SnakeForWPF;component/Fonts/#Microsoft YaHei UI</FontFamily>
+
+
+
+
+
+
+</ResourceDictionary>

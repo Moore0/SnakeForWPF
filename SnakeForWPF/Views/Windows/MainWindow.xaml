@@ -1,0 +1,19 @@
+﻿<windows:WindowBase 
+        x:Class="SnakeForWPF.Views.Windows.MainWindow"
+        x:TypeArguments="viewModels:MainWindowViewModel"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:windows="clr-namespace:SnakeForWPF.Views.Windows"
+        xmlns:viewModels="clr-namespace:SnakeForWPF.ViewModels"
+        xmlns:pages="clr-namespace:SnakeForWPF.Views.Pages"
+        Style="{DynamicResource MainWindowStyle}"
+        mc:Ignorable="d"      
+        Title="贪吃蛇" Height="600" Width="800" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+
+
+
+    <pages:MainPage />
+
+</windows:WindowBase>
