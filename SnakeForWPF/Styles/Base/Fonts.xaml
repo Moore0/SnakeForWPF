@@ -7,9 +7,10 @@
     
     
     <!--微软雅黑-->
-    <FontFamily x:Key="微软雅黑">pack://application:,,,/SnakeForWPF;component/Fonts/#Microsoft YaHei UI</FontFamily>
+    <!--<FontFamily x:Key="微软雅黑">pack://application:,,,/SnakeForWPF;component/Fonts/#Microsoft YaHei UI</FontFamily>-->
 
 
+    <FontFamily x:Key="微软雅黑">微软雅黑</FontFamily>
 
 
 
