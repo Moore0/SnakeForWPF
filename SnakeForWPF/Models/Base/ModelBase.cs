@@ -32,6 +32,15 @@ namespace SnakeForWPF.Models
                 return;
 
             oldValue = newValue;
+            OnPropertyChanged(propertyName);
+        }
+
+        /// <summary>
+        /// 通知界面更新
+        /// </summary>
+        /// <param name="propertyName"></param>
+        public void OnPropertyChanged(string propertyName)
+        {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
