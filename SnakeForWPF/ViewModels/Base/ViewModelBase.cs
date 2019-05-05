@@ -11,8 +11,12 @@ namespace SnakeForWPF.ViewModels
     /// <summary>
     /// ViewModel基类
     /// </summary>
+    [PropertyChanged.ImplementPropertyChanged]
     public class ViewModelBase : INotifyPropertyChanged
     {
+        /// <summary>
+        /// 属性发生改变时调用
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>

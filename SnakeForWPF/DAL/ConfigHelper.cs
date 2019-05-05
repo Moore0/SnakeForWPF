@@ -64,16 +64,6 @@ namespace SnakeForWPF.DAL
         }
 
         /// <summary>
-        /// 获取默认字符串
-        /// </summary>
-        /// <param name="v"></param>
-        /// <returns></returns>
-        public static string ReadConnectionString(string key)
-        {
-            return ConfigurationManager.ConnectionStrings[key].ConnectionString;
-        }
-
-        /// <summary>
         /// 刷新配置节
         /// </summary>
         public static void RefreshSection()

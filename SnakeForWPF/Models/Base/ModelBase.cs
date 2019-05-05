@@ -11,12 +11,14 @@ namespace SnakeForWPF.Models
     /// <summary>
     /// Model基类
     /// </summary>
+    [Serializable]
     [PropertyChanged.ImplementPropertyChanged]
     public class ModelBase : INotifyPropertyChanged
     {
         /// <summary>
         /// PropertyChanged事件
         /// </summary>
+        [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>

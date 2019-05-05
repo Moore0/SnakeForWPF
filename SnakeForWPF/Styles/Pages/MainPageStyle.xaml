@@ -10,15 +10,17 @@
 
                         <DockPanel>
                             <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center" Margin="0,0,10,0">
-                                <Button Style="{StaticResource WindowControlButton}" Content="暂停" Command="{Binding PauseComamnd}" CommandParameter="{Binding ElementName=snakePanel}" />
-                                <Button Style="{StaticResource WindowControlButton}" Content="继续" Command="{Binding ContinueComamnd}" CommandParameter="{Binding ElementName=snakePanel}"/>
-                                <Button Style="{StaticResource WindowControlButton}" Content="重新开始" Command="{Binding StartCommand}" CommandParameter="{Binding ElementName=snakePanel}"/>
-                                <Button Style="{StaticResource WindowControlButton}" Content="退出游戏" Command="{Binding ExitCommand}" CommandParameter="{Binding ElementName=snakePanel}"/>
+                                <Button Style="{StaticResource WindowControlButton}" Content="暂停" Command="{Binding PauseComamnd}" />
+                                <Button Style="{StaticResource WindowControlButton}" Content="继续" Command="{Binding ContinueComamnd}"/>
+                                <Button Style="{StaticResource WindowControlButton}" Content="重新开始" Command="{Binding StartCommand}" />
+                                <Button Style="{StaticResource WindowControlButton}" Content="退出游戏" Command="{Binding ExitCommand}" />
                             </StackPanel>
-
                             <Border DockPanel.Dock="Left" Margin="20" BorderBrush="{StaticResource BackgroundLightBrush}" BorderThickness="5">
                                 <AdornerDecorator>
-                                    <panels:SnakePanel x:Name="snakePanel"/>
+                                    <panels:SnakePanel x:Name="snakePanel" 
+                                                       SnakeNodes="{Binding SnakeNodes}" 
+                                                       LineX="{Binding LineX}" 
+                                                       LineY="{Binding LineY}"/>
                                 </AdornerDecorator>
                             </Border>
                         </DockPanel>

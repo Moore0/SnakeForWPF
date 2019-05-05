@@ -18,9 +18,7 @@ namespace SnakeForWPF
         /// 构造函数
         /// </summary>
         public App()
-        {
-
-        }
+        {}
 
         /// <summary>
         /// 主线程全局异常捕获
@@ -29,7 +27,12 @@ namespace SnakeForWPF
         /// <param name="e"></param>
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
+            //记录日志
 
+
+
+
+            e.Handled = true;
         }
 
         /// <summary>
@@ -45,6 +48,12 @@ namespace SnakeForWPF
                 return 1000;
             }
         }
+
+
+
+
+
+
 
     }
 }

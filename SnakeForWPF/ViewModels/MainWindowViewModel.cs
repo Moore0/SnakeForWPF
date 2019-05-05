@@ -1,5 +1,4 @@
 ﻿using SnakeForWPF.Commands;
-using SnakeForWPF.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,46 +14,16 @@ namespace SnakeForWPF.ViewModels
     /// </summary>
     public class MainWindowViewModel : ViewModelBase
     {
-        /// <summary>
-        /// 主窗口对象
-        /// </summary>
-        private Window mWindow;
-
-        /// <summary>
-        /// 标题栏高度
-        /// </summary>
-        public int TitleHeight { get; set; } = 42;
-
-        /// <summary>
-        /// 最小化命令
-        /// </summary>
-        public ICommand MinimizeCommand { get; set; }
-        /// <summary>
-        /// 最大化命令
-        /// </summary>
-        public ICommand MaximizeCommand { get; set; }
-        /// <summary>
-        /// 关闭命令
-        /// </summary>
-        public ICommand CloseCommand { get; set; }
-        /// <summary>
-        /// 菜单命令
-        /// </summary>
-        public ICommand MenuCommand { get; set; }
+        #region ctor
 
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="window"></param>
-        public MainWindowViewModel(Window window) 
+        public MainWindowViewModel(Window window)
             : base()
         {
             mWindow = window ?? throw new ArgumentException(nameof(window));
-
-            MinimizeCommand = new RelayCommand(_ => mWindow.WindowState = WindowState.Minimized, _ => true);
-            MaximizeCommand = new RelayCommand(_ => mWindow.WindowState ^= WindowState.Maximized, _ => mWindow.ResizeMode != ResizeMode.NoResize);
-            CloseCommand = new RelayCommand(_ => mWindow.Close(), _ => true);
-            MenuCommand = new RelayCommand(_ => SystemCommands.ShowSystemMenu(mWindow, GetMousePosition()), _ => true);
         }
 
         /// <summary>
@@ -62,6 +31,43 @@ namespace SnakeForWPF.ViewModels
         /// </summary>
         public MainWindowViewModel()
         { }
+
+        #endregion
+
+        #region prop
+
+        /// <summary>
+        /// 标题栏高度
+        /// </summary>
+        public int TitleHeight { get; set; } = 42;
+
+        #endregion
+
+        #region command
+
+        /// <summary>
+        /// 最小化命令
+        /// </summary>
+        public ICommand MinimizeCommand { get => new RelayCommand(_ => mWindow.WindowState = WindowState.Minimized, _ => true); }
+        /// <summary>
+        /// 最大化命令
+        /// </summary>
+        public ICommand MaximizeCommand { get => new RelayCommand(_ => mWindow.WindowState ^= WindowState.Maximized, _ => mWindow.ResizeMode != ResizeMode.NoResize); }
+        /// <summary>
+        /// 关闭命令
+        /// </summary>
+        public ICommand CloseCommand { get => new RelayCommand(_ => mWindow.Close(), _ => true); }
+        /// <summary>
+        /// 菜单命令
+        /// </summary>
+        public ICommand MenuCommand { get=> new RelayCommand(_ => SystemCommands.ShowSystemMenu(mWindow, GetMousePosition()), _ => true); }
+
+        #endregion
+
+        /// <summary>
+        /// 主窗口对象
+        /// </summary>
+        private readonly Window mWindow;
 
         /// <summary>
         /// 获取鼠标位置

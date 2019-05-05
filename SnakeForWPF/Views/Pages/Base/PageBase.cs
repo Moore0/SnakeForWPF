@@ -17,6 +17,8 @@ namespace SnakeForWPF.Views.Pages
     public class PageBase<T> : UserControl
         where T : ViewModelBase, new()
     {
+        #region ctor
+
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -29,6 +31,9 @@ namespace SnakeForWPF.Views.Pages
             DataContext = ViewModel;
         }
 
+        #endregion
+
+        #region virtual method
 
         /// <summary>
         /// 获取并程序集中的样式
@@ -56,9 +61,16 @@ namespace SnakeForWPF.Views.Pages
             SetValue(StyleProperty, dictionary[controlStyleAttribute.StyleKey]);
         }
 
+        #endregion
+
+        #region prop
+
         /// <summary>
         /// ViewModel对象
         /// </summary>
         public T ViewModel { private set; get; } = new T();
+
+        #endregion
+
     }
 }

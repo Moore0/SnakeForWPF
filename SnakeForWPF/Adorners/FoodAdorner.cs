@@ -30,8 +30,6 @@ namespace SnakeForWPF.Adorners
             RadiuY = radiuY;
         }
 
-
-
         /// <summary>
         /// 重绘
         /// </summary>

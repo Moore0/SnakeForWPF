@@ -15,6 +15,9 @@ namespace SnakeForWPF.Converters
     public abstract class BaseValueConverter<T> : MarkupExtension, IValueConverter
         where T : class, new()
     {
+        /// <summary>
+        /// 转换器对象
+        /// </summary>
         private static T converter = null;
 
         public override object ProvideValue(IServiceProvider serviceProvider)

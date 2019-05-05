@@ -10,7 +10,7 @@
         xmlns:pages="clr-namespace:SnakeForWPF.Views.Pages"
         Style="{DynamicResource MainWindowStyle}"
         mc:Ignorable="d"      
-        Title="贪吃蛇" Height="600" Width="800" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        Title="贪吃蛇" Height="600" Width="800" WindowStartupLocation="CenterScreen">
 
 
 

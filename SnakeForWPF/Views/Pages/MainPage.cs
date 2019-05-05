@@ -15,10 +15,13 @@ namespace SnakeForWPF.Views.Pages
     [PageStyle(Uri = "SnakeForWPF;component/Styles/Pages/MainPageStyle.xaml", UriKind = UriKind.Relative, StyleKey = "MainPageStyle")]
     public class MainPage : PageBase<MainPageViewModel>
     {
+        #region ctor
         /// <summary>
         /// 构造函数
         /// </summary>
         public MainPage()
         {}
+
+        #endregion
     }
 }

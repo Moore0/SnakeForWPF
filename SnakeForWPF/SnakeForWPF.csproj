@@ -44,12 +44,19 @@
     <Reference Include="DynamicExpresso.Core, Version=2.3.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\DynamicExpresso.Core.2.3.1\lib\net461\DynamicExpresso.Core.dll</HintPath>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.6.3\lib\net45\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="PropertyChanged2, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
       <HintPath>..\packages\PropertyChanged2.Fody.2.6.0\lib\net40\PropertyChanged2.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -106,15 +113,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Attributes\PageStyleAttribute.cs" />
-    <Compile Include="Behaviors\Base\Behavior.cs" />
-    <Compile Include="Behaviors\Base\BehaviorAttach.cs" />
-    <Compile Include="Behaviors\Base\BehaviorBase.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\Base\BaseValueConverter.cs" />
     <Compile Include="DAL\ConfigHelper.cs" />
-    <Compile Include="Interfaces\IController.cs" />
     <Compile Include="Models\Base\ModelBase.cs" />
-    <Compile Include="Controls\SnakeNode.cs" />
+    <Compile Include="Models\SnakeNodeModel.cs" />
     <Compile Include="Models\GameState.cs" />
     <Compile Include="Panels\SnakePanel.cs" />
     <Compile Include="ViewModels\Base\ViewModelBase.cs" />
@@ -149,6 +152,12 @@
     <None Include="FodyWeavers.xsd">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -160,9 +169,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Animations\" />
-    <Folder Include="DLL\" />
+    <Folder Include="Extensions\" />
     <Folder Include="Fonts\" />
-    <Folder Include="Imgs\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="FodyWeavers.xml" />
