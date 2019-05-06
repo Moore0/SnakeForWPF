@@ -113,7 +113,10 @@
     </Compile>
     <Compile Include="Attributes\PageStyleAttribute.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Converters\Base\BaseMultiValueConverter.cs" />
     <Compile Include="Converters\Base\BaseValueConverter.cs" />
+    <Compile Include="Converters\SnakeNodesConverter.cs" />
+    <Compile Include="Converters\UniformGridForSnakePanelConverter.cs" />
     <Compile Include="DAL\ConfigHelper.cs" />
     <Compile Include="Models\Base\ModelBase.cs" />
     <Compile Include="Models\SnakeNodeModel.cs" />

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -52,6 +53,8 @@ namespace SnakeForWPF
         /// <param name="e"></param>
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
+            Debugger.Break();
+
             //记录日志
             Logger.Error(e);
             e.Handled = true;

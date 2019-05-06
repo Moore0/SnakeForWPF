@@ -131,7 +131,7 @@ namespace SnakeForWPF.Panels
         {
             base.OnRender(dc);
 
-            //可使用依赖注入使这部分逻辑独立
+            //使用依赖注入使这部分逻辑独立
             DrawGrid(dc);
             DrawSnakeNodes(dc);
             DrawFood(dc);

@@ -79,7 +79,7 @@ namespace SnakeForWPF.ViewModels
         /// 贪吃蛇节点数据
         /// </summary>
         [PropertyChanged.DoNotCheckEquality]
-        public ObservableCollection<SnakeNode> SnakeNodes {private set; get; } = new ObservableCollection<SnakeNode>();
+        public ObservableCollection<SnakeNode> SnakeNodes { private set; get; } = new ObservableCollection<SnakeNode>();
 
         /// <summary>
         /// 游戏状态(默认处于等待开始)
@@ -105,6 +105,12 @@ namespace SnakeForWPF.ViewModels
         /// 列数
         /// </summary>
         public int LineY { set; get; } = 19;
+
+        /// <summary>
+        /// 是否允许操作(未移动前不允许修改操作)
+        /// </summary>
+        public bool CanOperate { set; get; } = true;
+
 
         #endregion
 
@@ -223,7 +229,9 @@ namespace SnakeForWPF.ViewModels
         /// <returns></returns>
         private bool IsHitSelf(int x, int y)
         {
-            //判断是否撞到自身
+            //if (SnakeNodes.Count < 3)
+            //    return false;
+
             for (int i = 0; i < SnakeNodes.Count - 1; ++i)
             {
                 if (SnakeNodes[i].X == x && SnakeNodes[i].Y == y)
@@ -462,8 +470,13 @@ namespace SnakeForWPF.ViewModels
                 && (e.Key == Key.W || e.Key == Key.Up))
                 return;
 
-            //记录上一次的按键
-            LastKey = e.Key;
+
+            if (CanOperate || GameState == GameState.WaitBegin)
+            {
+                //记录上一次的按键
+                LastKey = e.Key;
+                CanOperate = false;
+            }
         }
 
 
@@ -498,6 +511,8 @@ namespace SnakeForWPF.ViewModels
                 {
                     //移动
                     Move((Key)LastKey);
+                    //允许操作
+                    CanOperate = true;
 
                     //获取食物
                     if (FoodPoint == null)
