@@ -1,8 +1,9 @@
-﻿using SnakeForWPF.Adorners;
-using SnakeForWPF.Models;
+﻿using SnakeForWPF.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,8 +25,10 @@ namespace SnakeForWPF.Panels
         /// 构造函数
         /// </summary>
         public SnakePanel()
-        { }
-
+        {
+            //设计缺陷
+            Panel = this;
+        }
 
         #endregion
 
@@ -40,13 +43,20 @@ namespace SnakeForWPF.Panels
         }
         public static readonly DependencyProperty SnakeNodesProperty =
             DependencyProperty.Register(nameof(SnakeNodes), typeof(IList<SnakeNode>), typeof(SnakePanel),
-                new FrameworkPropertyMetadata(new List<SnakeNode>(), FrameworkPropertyMetadataOptions.AffectsArrange, (s, e) =>
+                new FrameworkPropertyMetadata(new List<SnakeNode>(), FrameworkPropertyMetadataOptions.AffectsRender, (d, e) =>
            {
-
-
-
-
+               if (e.NewValue is INotifyCollectionChanged notifyCollection)
+               {
+                   NotifyCollectionChangedEventHandler handler = (sender, ee) =>
+                   {
+                       //触发重绘
+                       Panel.InvalidateVisual();
+                   };
+                   notifyCollection.CollectionChanged -= handler;
+                   notifyCollection.CollectionChanged += handler;
+               }
            }));
+
 
         /// <summary>
         /// 总行数
@@ -63,11 +73,7 @@ namespace SnakeForWPF.Panels
         }
         public static readonly DependencyProperty LineXProperty =
             DependencyProperty.Register(nameof(LineX), typeof(int), typeof(SnakePanel),
-                new FrameworkPropertyMetadata(19, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback((s, e) =>
-             {
-
-
-             })));
+                new FrameworkPropertyMetadata(19, FrameworkPropertyMetadataOptions.AffectsRender));
 
 
         /// <summary>
@@ -84,24 +90,38 @@ namespace SnakeForWPF.Panels
             }
         }
         public static readonly DependencyProperty LineYProperty =
-            DependencyProperty.Register(nameof(LineY), typeof(int), typeof(SnakePanel), new FrameworkPropertyMetadata(19, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback((s, e) =>
-             {
+            DependencyProperty.Register(nameof(LineY), typeof(int), typeof(SnakePanel),
+                new FrameworkPropertyMetadata(19, FrameworkPropertyMetadataOptions.AffectsRender));
 
-
-
-             })));
-
+        /// <summary>
+        /// 食物坐标
+        /// </summary>
+        public Point? FoodPoint
+        {
+            get { return (Point?)GetValue(FoodPointProperty); }
+            set { SetValue(FoodPointProperty, value); }
+        }
+        public static readonly DependencyProperty FoodPointProperty =
+            DependencyProperty.Register(nameof(FoodPoint), typeof(Point?), typeof(SnakePanel),
+                new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
 
         #endregion
-
-
 
         #region propa
 
 
         #endregion
 
+        #region prop
 
+        /// <summary>
+        /// 面板对象
+        /// </summary>
+        public static SnakePanel Panel { private set; get; }
+
+        #endregion
+
+        #region 绘制逻辑
 
         /// <summary>
         /// 重绘
@@ -110,9 +130,41 @@ namespace SnakeForWPF.Panels
         protected override void OnRender(DrawingContext dc)
         {
             base.OnRender(dc);
+
+            //可使用依赖注入使这部分逻辑独立
             DrawGrid(dc);
+            DrawSnakeNodes(dc);
+            DrawFood(dc);
         }
 
+        /// <summary>
+        /// 绘制食物
+        /// </summary>
+        /// <param name="dc"></param>
+        private void DrawFood(DrawingContext dc)
+        {
+            if (FoodPoint == null)
+                return;
+
+            double xLength = ActualWidth / LineX;
+            double yLength = ActualHeight / LineY;
+
+            dc.DrawEllipse(Brushes.Red, null, new Point((FoodPoint.Value.X + 0.5) * xLength, (FoodPoint.Value.Y + 0.5) * yLength), 10, 10);
+        }
+
+        /// <summary>
+        /// 绘制贪吃蛇节点
+        /// </summary>
+        private void DrawSnakeNodes(DrawingContext dc)
+        {
+            double xLength = ActualWidth / LineX;
+            double yLength = ActualHeight / LineY;
+
+            foreach (var node in SnakeNodes)
+            {
+                dc.DrawRectangle(node.Brush, null, new Rect(xLength * node.X, yLength * node.Y, xLength, yLength));
+            }
+        }
 
         /// <summary>
         /// 绘制网格
@@ -134,43 +186,6 @@ namespace SnakeForWPF.Panels
             }
         }
 
-
-
-
-        /// <summary>
-        /// 计算元素大小
-        /// </summary>
-        /// <param name="availableSize"></param>
-        /// <returns></returns>
-        protected override Size MeasureOverride(Size availableSize)
-        {
-            //foreach (var node in Nodes)
-            //{
-            //    node.Measure(new Size(availableSize.Width / LineX, availableSize.Height / LineY));
-            //}
-            return availableSize;
-        }
-
-
-        protected override int VisualChildrenCount => SnakeNodes.Count;
-
-
-        /// <summary>
-        /// 排列元素
-        /// </summary>
-        /// <param name="finalSize"></param>
-        /// <returns></returns>
-        protected override Size ArrangeOverride(Size finalSize)
-        {
-            double xLength = ActualWidth / LineX;
-            double yLength = ActualHeight / LineY;
-
-            //foreach (var node in Children.Cast<FrameworkElement>())
-            //{
-            //    node.Arrange(new Rect(new Point(GetX(node) * xLength, GetY(node) * yLength), new Size(xLength, yLength)));
-            //}
-
-            return finalSize;
-        }
+        #endregion
     }
 }

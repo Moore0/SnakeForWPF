@@ -21,6 +21,7 @@ namespace SnakeForWPF.Views.Windows
     /// </summary>
     public partial class MainWindow : WindowBase<MainWindowViewModel>
     {
+        #region ctor
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -31,7 +32,8 @@ namespace SnakeForWPF.Views.Windows
             //初始化ViewModel
             ViewModel = new MainWindowViewModel(this);
             //重新设置DataContext
-            DataContext = ViewModel;
+            DataContext = ViewModel;       
         }
+        #endregion
     }
 }

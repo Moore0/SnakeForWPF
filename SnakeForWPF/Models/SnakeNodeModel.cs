@@ -29,6 +29,7 @@ namespace SnakeForWPF.Models
             set => brush = value.ToString();
         }
 
+
         /// <summary>
         /// X轴坐标
         /// </summary>

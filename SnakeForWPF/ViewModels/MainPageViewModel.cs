@@ -3,6 +3,7 @@ using SnakeForWPF.Models;
 using SnakeForWPF.Panels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -26,7 +27,10 @@ namespace SnakeForWPF.ViewModels
         /// 构造函数
         /// </summary>
         public MainPageViewModel()
-        { }
+        {
+            //关联键盘按下事件
+            App.Current.MainWindow.KeyDown += KeyDown;
+        }
 
         #endregion
 
@@ -69,21 +73,42 @@ namespace SnakeForWPF.ViewModels
 
         #endregion
 
+        #region prop
+
         /// <summary>
         /// 贪吃蛇节点数据
         /// </summary>
         [PropertyChanged.DoNotCheckEquality]
-        public IList<SnakeNode> SnakeNodes { set; get; } = new List<SnakeNode>();
+        public ObservableCollection<SnakeNode> SnakeNodes {private set; get; } = new ObservableCollection<SnakeNode>();
+
+        /// <summary>
+        /// 游戏状态(默认处于等待开始)
+        /// </summary>
+        public GameState GameState { private set; get; } = GameState.WaitBegin;
+
+        /// <summary>
+        /// 上一个按键
+        /// </summary>
+        public Key? LastKey { private set; get; }
+
+        /// <summary>
+        /// 食物点
+        /// </summary>
+        public Point? FoodPoint { private set; get; }
 
         /// <summary>
         /// 行数
         /// </summary>
-        public int LineX { set; get; }
+        public int LineX { set; get; } = 19;
 
         /// <summary>
         /// 列数
         /// </summary>
-        public int LineY { set; get; }
+        public int LineY { set; get; } = 19;
+
+        #endregion
+
+        #region 主要逻辑
 
         /// <summary>
         /// 移动
@@ -124,9 +149,6 @@ namespace SnakeForWPF.ViewModels
                     MoveDown();
                     break;
             }
-
-            ////重新布局
-            //InvalidateArrange();       
         }
 
         /// <summary>
@@ -297,26 +319,13 @@ namespace SnakeForWPF.ViewModels
         {
             if (p == FoodPoint)
             {
-                var node = new SnakeNode();
-
-                ////设置节点位置
-                ////第一个节点设置到中间
-                //SetX(node, (int)p.X);
-                //SetY(node, (int)p.Y);
-
-                ////添加节点到SnakePanel
-                //Children.Add(node);
-                //InvalidateArrange();
-
-
-                node.X = (int)p.X;
-                node.Y = (int)p.Y;
+                var node = new SnakeNode
+                {
+                    X = (int)p.X,
+                    Y = (int)p.Y
+                };
 
                 SnakeNodes.Add(node);
-
-
-
-
 
                 FoodPoint = null;
                 return true;
@@ -403,16 +412,15 @@ namespace SnakeForWPF.ViewModels
         {
             //空的节点
             List<Point> spacePoints = new List<Point>();
-
+            //已存在的节点
             List<Point> snakePoints = new List<Point>();
 
-
+            //遍历节点,添加空的节点
             foreach (var node in SnakeNodes)
             {
                 snakePoints.Add(new Point(node.X, node.Y));
             }
 
-            //遍历
             for (int i = 0; i < LineX; ++i)
             {
                 for (int j = 0; j < LineY; ++j)
@@ -425,8 +433,37 @@ namespace SnakeForWPF.ViewModels
                 }
             }
 
+            //从空的节点中随机获取一个
             int index = new Random(Guid.NewGuid().GetHashCode()).Next(0, spacePoints.Count);
             return spacePoints[index];
+        }
+
+
+
+
+        /// <summary>
+        /// 键盘按下
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void KeyDown(object sender, KeyEventArgs e)
+        {
+            //不能掉头
+            if ((LastKey == Key.A || LastKey == Key.Left)
+                && (e.Key == Key.D || e.Key == Key.Right))
+                return;
+            if ((LastKey == Key.W || LastKey == Key.Up)
+                && (e.Key == Key.S || e.Key == Key.Down))
+                return;
+            if ((LastKey == Key.D || LastKey == Key.Right)
+                && (e.Key == Key.A || e.Key == Key.Left))
+                return;
+            if ((LastKey == Key.S || LastKey == Key.Down)
+                && (e.Key == Key.W || e.Key == Key.Up))
+                return;
+
+            //记录上一次的按键
+            LastKey = e.Key;
         }
 
 
@@ -468,25 +505,15 @@ namespace SnakeForWPF.ViewModels
                         //获取食物位置
                         Point p = GetFoodPoint();
                         FoodPoint = p;
-
-                        ////移除之前的
-                        //Adorner[] ads = Layer.GetAdorners(this);
-                        //if (ads != null)
-                        //{
-                        //    for (int i = ads.Length - 1; i >= 0; --i)
-                        //    {
-                        //        Layer.Remove(ads[i]);
-                        //    }
-                        //}
-
-                        //添加到装饰层
-                        //Layer.Add(new FoodAdorner(this, new Point((p.X + 0.5) * ActualWidth / LineX, (p.Y + 0.5) * ActualHeight / LineY), 10, 10));
                     }
                 }
                 else if (GameState == GameState.WaitBegin)
                 {
                     break;
                 }
+
+                //触发更新
+                SnakeNodes = new ObservableCollection<SnakeNode>(SnakeNodes);
 
                 //延迟一段时间
                 await Task.Delay(TimeSpan.FromMilliseconds(App.Speed));
@@ -517,51 +544,6 @@ namespace SnakeForWPF.ViewModels
             GameState = GameState.Begin;
         }
 
-        /// <summary>
-        /// 键盘按下
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void SnakePanel_KeyDown(object sender, KeyEventArgs e)
-        {
-            //不能掉头
-            if ((LastKey == Key.A || LastKey == Key.Left)
-                && (e.Key == Key.D || e.Key == Key.Right))
-                return;
-            if ((LastKey == Key.W || LastKey == Key.Up)
-                && (e.Key == Key.S || e.Key == Key.Down))
-                return;
-            if ((LastKey == Key.D || LastKey == Key.Right)
-                && (e.Key == Key.A || e.Key == Key.Left))
-                return;
-            if ((LastKey == Key.S || LastKey == Key.Down)
-                && (e.Key == Key.W || e.Key == Key.Up))
-                return;
-
-            //记录上一次的按键
-            LastKey = e.Key;
-        }
-
-
-
-        /// <summary>
-        /// 游戏状态(默认处于等待开始)
-        /// </summary>
-        public GameState GameState { private set; get; } = GameState.WaitBegin;
-
-        /// <summary>
-        /// 上一个按键
-        /// </summary>
-        public Key? LastKey { private set; get; }
-
-        ///// <summary>
-        ///// 获取AdornerLayer
-        ///// </summary>
-        //public AdornerLayer Layer { get => AdornerLayer.GetAdornerLayer(this); }
-
-        /// <summary>
-        /// 食物点
-        /// </summary>
-        public Point? FoodPoint {private set; get; }
+        #endregion
     }
 }

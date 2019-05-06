@@ -9,10 +9,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <!--全局资源-->
                 <ResourceDictionary Source="Styles/AllStyles.xaml"/>
-
-
-
-
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
