@@ -1,5 +1,4 @@
-﻿using SnakeForWPF.Converters.Base;
-using SnakeForWPF.Models;
+﻿using SnakeForWPF.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,10 +16,12 @@ namespace SnakeForWPF.Converters
     /// <summary>
     /// SnakePanel面板转换器
     /// </summary>
-    public class SnakePanelControlConverter : BaseMultiValueConverter<SnakePanelControlConverter>
+    public class SnakePanelConverterForControl : BaseMultiValueConverter<SnakePanelConverterForControl>
     {
         public override object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
+            #region 获取参数
+
             if (values.Count() < 5)
                 throw new ArgumentOutOfRangeException(nameof(values));
 
@@ -33,6 +34,8 @@ namespace SnakeForWPF.Converters
             int lineX = (int)values[2];
             int lineY = (int)values[3];
             Point? foodPoint = (Point?)values[4];
+
+            #endregion
 
             //格子数量发生变化
             if (uniformGrid.Children.Count != lineX * lineY)

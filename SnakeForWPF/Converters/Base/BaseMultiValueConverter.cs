@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Markup;
 
-namespace SnakeForWPF.Converters.Base
+namespace SnakeForWPF.Converters
 {
     /// <summary>
-    /// 转换器基类
+    /// 多值转换器基类
     /// </summary>
     public abstract class BaseMultiValueConverter<T> : MarkupExtension, IMultiValueConverter
         where T : class, new()

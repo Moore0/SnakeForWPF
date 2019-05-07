@@ -7,6 +7,8 @@
 
         <ResourceDictionary Source="Buttons.xaml"/>
         <ResourceDictionary Source="Windows.xaml"/>
+        <ResourceDictionary Source="ListBoxs.xaml"/>
+        <ResourceDictionary Source="ListBoxItems.xaml"/>
         
         
         

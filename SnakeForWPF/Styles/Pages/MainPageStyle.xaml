@@ -14,31 +14,64 @@
                                 <Button Style="{StaticResource WindowControlButton}" Content="重新开始" Command="{Binding StartCommand}" />
                                 <Button Style="{StaticResource WindowControlButton}" Content="退出游戏" Command="{Binding ExitCommand}" />
                             </StackPanel>
-                            <Border DockPanel.Dock="Left" Margin="20" BorderBrush="{StaticResource BackgroundLightBrush}" BorderThickness="5">
-                                <!--使用自定义面板绘制逻辑-->
-                                
-                                <!--<panels:SnakePanel SnakeNodes="{Binding SnakeNodes}" 
+                            <Viewbox>
+                                <Border DockPanel.Dock="Left" Margin="20" BorderBrush="{StaticResource BackgroundLightBrush}" BorderThickness="5" Width="600" Height="600">
+                                    <!--#region 1)使用自定义面板绘制逻辑-->
+                                    <!--<panels:SnakePanel SnakeNodes="{Binding SnakeNodes}" 
                                                        LineX="{Binding LineX}" 
                                                        LineY="{Binding LineY}"
                                                        FoodPoint="{Binding FoodPoint}"/>-->
-                                
-                                
-                                <!--使用转换器控制绘制逻辑-->
-                                <UniformGrid Background="{StaticResource BackgroundLightBrush}">
-                                    <UniformGrid.Tag>
-                                        <MultiBinding Converter="{converters:SnakePanelControlConverter}">
-                                            <Binding RelativeSource="{RelativeSource Mode=Self}"/>
-                                            <Binding Path="SnakeNodes" />
-                                            <Binding Path="LineX" />
-                                            <Binding Path="LineY" />
-                                            <Binding Path="FoodPoint" />
-                                        </MultiBinding>
-                                    </UniformGrid.Tag>
-                                </UniformGrid>
-                            
-                            
-                            
-                            </Border>
+                                    <!--#endregion-->
+
+                                    <!--#region 2)使用转换器控制绘制逻辑-->
+                                    <!--<UniformGrid Background="{StaticResource BackgroundLightBrush}">
+                                        <UniformGrid.Tag>
+                                            <MultiBinding Converter="{converters:SnakePanelConverterForControl}">
+                                                <Binding RelativeSource="{RelativeSource Mode=Self}"/>
+                                                <Binding Path="SnakeNodes" />
+                                                <Binding Path="LineX" />
+                                                <Binding Path="LineY" />
+                                                <Binding Path="FoodPoint" />
+                                            </MultiBinding>
+                                        </UniformGrid.Tag>
+                                    </UniformGrid>-->
+                                    <!--#endregion-->
+
+                                    <!--#region 3)使用ListBox作为容器-->
+                                    <ListBox x:Name="lv"  
+                                         IsEnabled="False" 
+                                         HorizontalContentAlignment="Stretch" 
+                                         VerticalContentAlignment="Stretch" 
+                                         BorderThickness="0" 
+                                         Padding="0"
+                                         ItemContainerStyle="{StaticResource ListBoxForSnakePanelStyle}">
+                                        <ListBox.ItemsSource>
+                                            <!--实体类型设计缺陷,这里必须传多个参数进去-->                               
+                                            <MultiBinding Converter="{converters:ItemSourceConverter}">
+                                                <Binding Path="SnakeNodes" />
+                                                <Binding Path="LineX" />
+                                                <Binding Path="LineY" />
+                                                <Binding Path="FoodPoint" />
+                                            </MultiBinding>
+                                        </ListBox.ItemsSource>
+                                        
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Margin="1" Background="{Binding BlockType,Converter={converters:BlockBrushConverter}}">
+                                                </Border>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+
+                                        <ListBox.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Rows="{Binding LineY}" Columns="{Binding LineX}" Background="{StaticResource BackgroundLightBrush}"/>
+                                            </ItemsPanelTemplate>
+                                        </ListBox.ItemsPanel>
+                                    </ListBox>
+
+                                    <!--#endregion-->
+                                </Border>
+                            </Viewbox>
                         </DockPanel>
 
                     </ControlTemplate>

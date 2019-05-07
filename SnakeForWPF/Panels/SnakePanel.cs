@@ -64,16 +64,17 @@ namespace SnakeForWPF.Panels
         public int LineX
         {
             get { return (int)GetValue(LineXProperty); }
-            set
-            {
-                if (value < 19 || value > 38)
-                    throw new ArgumentException(nameof(LineX));
-                SetValue(LineXProperty, value);
-            }
+            set { SetValue(LineXProperty, value); }
         }
         public static readonly DependencyProperty LineXProperty =
             DependencyProperty.Register(nameof(LineX), typeof(int), typeof(SnakePanel),
-                new FrameworkPropertyMetadata(19, FrameworkPropertyMetadataOptions.AffectsRender));
+                new FrameworkPropertyMetadata(19, FrameworkPropertyMetadataOptions.AffectsRender, (d, e) =>
+                {
+                    int value = (int)e.NewValue;
+
+                    if (value < 19 || value > 38)
+                        throw new ArgumentOutOfRangeException(nameof(e.NewValue));
+                }));
 
 
         /// <summary>
@@ -82,16 +83,16 @@ namespace SnakeForWPF.Panels
         public int LineY
         {
             get { return (int)GetValue(LineYProperty); }
-            set
-            {
-                if (value < 19 || value > 38)
-                    throw new ArgumentException(nameof(LineY));
-                SetValue(LineYProperty, value);
-            }
+            set { SetValue(LineYProperty, value); }
         }
         public static readonly DependencyProperty LineYProperty =
             DependencyProperty.Register(nameof(LineY), typeof(int), typeof(SnakePanel),
-                new FrameworkPropertyMetadata(19, FrameworkPropertyMetadataOptions.AffectsRender));
+                new FrameworkPropertyMetadata(19, FrameworkPropertyMetadataOptions.AffectsRender, (d, e) =>
+                {
+                    int value = (int)e.NewValue;
+                    if (value < 19 || value > 38)
+                        throw new ArgumentOutOfRangeException(nameof(e.NewValue));
+                }));
 
         /// <summary>
         /// 食物坐标
